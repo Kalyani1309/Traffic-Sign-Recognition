@@ -1,5 +1,6 @@
-from flask import *
+from flask import Flask, render_template, request, redirect
 import os
+import cv2
 from werkzeug.utils import secure_filename
 from keras.models import load_model
 import numpy as np
@@ -53,13 +54,13 @@ classes = { 0:'Speed limit (20km/h)',
             42:'End no passing vehicle > 3.5 tons' }
 
 def image_processing(img):
-    model = load_model('./model/TSR.h5')
+    model = load_model('./model/TrafficSignPrediction.h5')
     data=[]
     image = Image.open(img)
     image = image.resize((30,30))
     data.append(np.array(image))
     X_test=np.array(data)
-    Y_pred = model.predict_classes(X_test)
+    Y_pred = np.argmax(model.predict(X_test), axis=-1)
     return Y_pred
 
 @app.route('/')
@@ -69,18 +70,21 @@ def index():
 @app.route('/predict', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
+        
         # Get the file from post request
         f = request.files['file']
         file_path = secure_filename(f.filename)
+        print(file_path)
         f.save(file_path)
+        
         # Make prediction
         result = image_processing(file_path)
         s = [str(i) for i in result]
         a = int("".join(s))
-        result = "Predicted Traffic🚦Sign is: " +classes[a]
+        result = "Predicted Traffic🚦Sign is: " + classes[a]
         os.remove(file_path)
         return result
     return None
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
