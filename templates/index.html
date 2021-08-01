@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 
-<h2 class="headingStyle">Select Image to be predicted</h2>
+<h2 class="headingStyle">Select an Image to be predicted</h2>
 <style> .footer {
    position: fixed;
    left: 0;
@@ -22,19 +22,19 @@
         <input type="file" name="file" id="imageUpload" accept=".png, .jpg, .jpeg">
     </form>
 
-    <div class="image-section" style="display:none;">
+    <div class="image-section" style="display:flex;justify-content: center;">
         <div class="img-preview">
             <div id="imagePreview">
             </div>
         </div>
         <div>
-            <button type="button" class="btn btn-primary btn-lg " id="btn-predict">Predict Traffic Sign 🚦</button>
+            <button type="button" class="btn btn-primary btn-lg " style="display:flex;justify-content: center;" id="btn-predict">Predict Traffic Sign 🚦</button>
         </div>
     </div>
 
-    <div class="loader" style="display:none;"></div>
+    <div class="loader" style="display:flex;justify-content: center;"></div>
 
-    <h3 id="result">
+    <h3 class="headingStyle" id="result">
         <span> </span>
     </h3>
 
